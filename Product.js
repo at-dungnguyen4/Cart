@@ -1,109 +1,152 @@
 var products = [
   {
     id: '1',
-    name: 'SP1',
-    describe: 'Mota1',
+    name: 'product 1',
+    describe: 'describe 1',
     img: 'images/1.png',
-    price: '&dollar;100000',
+    price: '100000',
+    count:0
   },
   {
     id: '2',
-    name: 'SP2',
-    describe: 'Mota2',
+    name: 'product 2',
+    describe: 'describe 2',
     img: 'images/2.png',
-    price: '&dollar;200000',
+    price: '200000',
+    count:0
   },
   {
     id: '3',
-    name: 'SP3',
-    describe: 'Mota3',
+    name: 'product 3',
+    describe: 'describe 3',
     img: 'images/3.png',
-    price: '&dollar;300000',
+    price: '300000',
+    count:0
   },
   {
     id: '4',
-    name: 'SP4',
-    describe: 'Mota4',
+    name: 'product 4',
+    describe: 'describe 4',
     img: 'images/4.png',
-    price: '&dollar;400000',
+    price: '400000',
+    count:0
   },
   {
     id: '5',
-    name: 'SP5',
-    describe: 'Mota5',
+    name: 'product 5',
+    describe: 'describe 5',
     img: 'images/5.png',
-    price: '&dollar;500000',
+    price: '500000',
+    count:0
   },
   {
     id: '6',
-    name: 'SP6',
-    describe: 'Mota6',
+    name: 'product 6',
+    describe: 'describe 6',
     img: 'images/6.png',
-    price: '&dollar;600000',
+    price: '600000',
+    count:0
   },
   {
     id: '7',
-    name: 'SP7',
-    describe: 'Mota7',
+    name: 'product 7',
+    describe: 'describe 7',
     img: 'images/7.png',
-    price: '&dollar;700000',
+    price: '700000',
+    count:0
   },
   {
     id: '8',
-    name: 'SP8',
-    describe: 'Mota8',
+    name: 'product 8',
+    describe: 'describe 1',
     img: 'images/8.png',
-    price: '&dollar;800000',
+    price: '800000',
+    count:0
   }
 ];
-//localStorage.clear();
-localStorage.setItem("product", JSON.stringify(products));
+localStorage.setItem("productvalue", JSON.stringify(products));
 var item = [];
-item = JSON.parse(localStorage.getItem('product'));
+item = JSON.parse(localStorage.getItem('productvalue'));
+var cart = JSON.parse(localStorage.getItem('productvalue'));
+
 var ul = document.getElementById('listproduct');
-var properties = ['id', 'img', 'name', 'describe', 'price'];
+var properties = ['id', 'img', 'name', 'describe', 'price','count'];
 
 function displayTable() {
   for (var i = 0; i < item.length; i++) {
-    var product  = item[i];
-    var li       = document.createElement('li');
-    var image    = document.createElement('div');
-    var name     = document.createElement('p');
+    var product = item[i];
+    var row = document.createElement('li');  
+    var image = document.createElement('div');
+    var name = document.createElement('p');
     var describe = document.createElement('p');
-    var price    = document.createElement('p');
-    var btnadd   = document.createElement('div');
-    image.innerHTML    = ('<img src=" ' + product[properties[1]] + ' ">');
-    name.innerHTML     = product[properties[2]];
+    var price = document.createElement('p');
+    var btnadd = document.createElement('div');
+    var count = document.createElement('p');
+    image.innerHTML = ('<img src=" ' + product[properties[1]] + ' ">');
+    name.innerHTML = product[properties[2]];
     describe.innerHTML = product[properties[3]];
-    price.innerHTML    = product[properties[4]];
-    btnadd.innerHTML   = ('<button id="' + product[properties[0]] + '" onclick="addCart(' + product[properties[0]] + ')" class="btn-primary">Add to Cart</button>');
-
-    li.appendChild(image);
-    li.appendChild(name);
-    li.appendChild(describe);
-    li.appendChild(price);
-    li.appendChild(btnadd);
-    ul.appendChild(li);
+    price.innerHTML = product[properties[4]];
+    btnadd.innerHTML = ('<button data-id="'+product[properties[0]]+'"  class="btn-primary">Add to cart</button>');
+    count.innerHTML = cart[i]['count'];
+    row.appendChild(image);
+    row.appendChild(name);
+    row.appendChild(describe);
+    row.appendChild(price);
+    row.appendChild(btnadd);
+    row.appendChild(count);
+    ul.appendChild(row);
   }
 }
+
 displayTable();
+addCart();
 
-var count = 0;
-var addToCart = [];
-function addCart(id) {
+
+/*var count = 0;
+var addToCart = [];*/
+/*function addCart(x) {
   count += 1;
-  document.getElementById('count').innerHTML = count;
-  addToCart.push(products[id - 1]);
-  localStorage.setItem('cart', JSON.stringify(addToCart));
-  var getAddCart = [];
-  getAddCart = JSON.parse(localStorage.getItem('cart'));
+  document.getElementById("count").innerHTML = count;
+  
+  addToCart.push(products[x-1]);
+  localStorage.setItem('add-cart', JSON.stringify(addToCart));
+  var getAddCart= [];
+  getAddCart = JSON.parse(localStorage.getItem('add-cart'));
+}*/
+function addCart(){
+  var btnClick = document.getElementsByClassName('btn-primary');
+  var count = 1;
+  //var cart = JSON.parse(localStorage.getItem('productvalue'));
+  for (var i = 0; i < btnClick.length; i++) {
+    var indexBtn = btnClick[i];
+    indexBtn.addEventListener('click', function (event) {
+      console.log(event.target.dataset.id);
+      var id = event.target.dataset.id;
+      if (cart) {
+        for (var i = 0; i < cart.length; i++) {
+          if (id === cart[i]['id']) {
+            cart[i]['count']++;
+            break;
+          }
+          else if (i === (cart.length - 1)) {
+            cart.push({  count: count });
+            break;
+          }
+        }
+      } else {
+        cart = [];
+        cart.push({  count: count });
+      }
+      localStorage.setItem('productvalue', JSON.stringify(cart));
+
+    });
+  }
+
 }
-
-// var btnClick = document.getElementsByClassName('btn-primary');
-// for (var i = 0; i < btnClick.length; i++) {
-//   var indexBtn = btnClick[i];
-//   indexBtn.addEventListener('click', function() {
-//     event.target.setAttribute('disabled', 'disabled');
-//   });
-// }
-
+/*var btnClick = document.getElementsByClassName('btn-primary');
+for (var i = 0; i < btnClick.length; i++) {
+  var indexBtn = btnClick[i];
+  indexBtn.addEventListener('click', function() {
+    event.target.setAttribute('disabled', 'disabled');
+  });
+}*/

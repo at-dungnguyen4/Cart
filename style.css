@@ -255,7 +255,6 @@ form h3{
 }
 footer{
   color: white;
-  margin-top: 40px;
   background-color: #62c6f8;
 }
 .company-info{
@@ -366,6 +365,7 @@ main #output #tablecart button:hover {
 /*Product css*/
 #output{
   margin-top: 50px;
+  margin-bottom: 40px;
 }
 #output #listproduct img{
   width: 100%;
